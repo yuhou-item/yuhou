@@ -18,22 +18,22 @@
 
 <script>
 
-import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
-import { Button } from 'vant';
-import { Swipe, SwipeItem } from 'vant';
-import { Image } from 'vant';
-let vConsole = new VConsole() // 初始化
+//import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
+//let vConsole = new VConsole() // 初始化
 const MiniApp = window.MiniApp
-const MusicPlayer = MiniApp.createMusicPlayer({ isInner: false })
 export default {
   name: 'Home',
   data () {
     return {
+      MusicPlayer: null,
       images: [
         'https://img.yzcdn.cn/vant/apple-1.jpg',
         'https://img.yzcdn.cn/vant/apple-2.jpg'
       ]
     }
+  },
+  created () {
+    this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: false })
   },
   methods: {
     yuhou () {
@@ -56,7 +56,13 @@ export default {
       });
     },
     music () {
-      MusicPlayer.setData({
+      MiniApp.showToast({
+        title: '播放音乐中',
+        icon: 'success',
+        duration: 2000,
+        mask: true
+      });
+      this.MusicPlayer.setData({
         album_audio_ids: MiniApp.getSongs({
           album_audio_ids: ["32072514", "108735213"],
           success: () => {
@@ -68,11 +74,10 @@ export default {
         }
         )
       })
-
-      MusicPlayer.play()
+      this.MusicPlayer.play()
     },
     stop () {
-      MusicPlayer.stop()
+      this.MusicPlayer.stop()
     }
   }
 }
