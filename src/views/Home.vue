@@ -7,7 +7,8 @@
       <button @click="yuhou">登录</button><br>
       <button @click="music">音乐</button><br>
       <button @click="stop">停止播放</button><br>
-      <button @click="search">搜索</button>
+      <button @click="previous">上一首</button><br>
+      <button @click="next">下一首</button><br>
     </main>
   </section>
 </template>
@@ -60,7 +61,7 @@ export default {
       });
       this.MusicPlayer.setData({
         album_audio_ids: MiniApp.getSongs({
-          album_audio_ids: [51872078, 197791851],//["32072514", "108735213"],
+          album_audio_ids: [32072514, 108735213],//["32072514", "108735213"],
           success: () => {
             alert('成功');
           },
@@ -75,8 +76,11 @@ export default {
     stop () {
       this.MusicPlayer.stop()
     },
-    search () {
-      MiniApp.searchSource({
+    previous () {
+      this.MusicPlayer.playPrevious()
+    },
+    next () {
+      /*MiniApp.searchSource({
         type: 1,
         keyword: "只因你太美",
         page: 1,
@@ -88,7 +92,8 @@ export default {
           })
           this.MusicPlayer.play()
         }
-      })
+      })*/
+      this.MusicPlayer.playNext()
     }
   }
 }
