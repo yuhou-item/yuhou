@@ -4,11 +4,14 @@
       <img alt="logo"
            src="@/assets/img/logo.png" />
       <div class="home__title">Hello!</div>
-      <button @click="yuhou">登录</button><br>
-      <button @click="music">音乐</button><br>
-      <button @click="stop">停止播放</button><br>
-      <button @click="previous">上一首</button><br>
-      <button @click="next">下一首</button><br>
+      <button class="button"
+              @click="music">音乐</button><br>
+      <button class="button"
+              @click="playToggle">{{playStatus}}</button><br>
+      <button class="button"
+              @click="previous">上一首</button><br>
+      <button class="button"
+              @click="next">下一首</button><br>
     </main>
   </section>
 </template>
@@ -22,6 +25,7 @@ export default {
   name: 'Home',
   data () {
     return {
+      playStatus: '暂停播放',
       MusicPlayer: null,
       images: [
         'https://img.yzcdn.cn/vant/apple-1.jpg',
@@ -73,26 +77,17 @@ export default {
       })
       this.MusicPlayer.play()
     },
-    stop () {
-      this.MusicPlayer.stop()
+    playToggle () {
+      this.MusicPlayer.playToggle()
+      if (this.playStatus === '暂停播放')
+        this.playStatus = '继续播放'
+      else
+        this.playStatus = "暂停播放"
     },
     previous () {
       this.MusicPlayer.playPrevious()
     },
     next () {
-      /*MiniApp.searchSource({
-        type: 1,
-        keyword: "只因你太美",
-        page: 1,
-        pageSize: 2,
-        success: function (data) {
-          console.log(data);
-          this.MusicPlayer.setData({
-            album_audio_ids: [data.song_data_list[0].album_audio_id, data.song_data_list[1].album_audio_id]
-          })
-          this.MusicPlayer.play()
-        }
-      })*/
       this.MusicPlayer.playNext()
     }
   }
@@ -100,6 +95,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.button {
+  width: 50px;
+  height: 50px;
+  background-color: #61dafb;
+}
 .home {
   height: 100%;
   width: 100%;
