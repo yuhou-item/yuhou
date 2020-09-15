@@ -22,7 +22,6 @@ import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
 import { Button } from 'vant';
 import { Swipe, SwipeItem } from 'vant';
 import { Image } from 'vant';
-Vue.use(Image);
 let vConsole = new VConsole() // 初始化
 const MiniApp = window.MiniApp
 const MusicPlayer = MiniApp.createMusicPlayer({ isInner: false })
