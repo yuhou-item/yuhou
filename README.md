@@ -9,7 +9,8 @@ npm install
 ## 运行项目
 npm run dev
 
-## 打包项目
+## 获取最新版本的
+git pull https://github.com/KaiHavertz/houshuang.git
 
 
 
