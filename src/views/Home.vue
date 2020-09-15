@@ -7,19 +7,15 @@
       <button @click="yuhou">登录</button><br>
       <button @click="music">音乐</button><br>
       <button @click="stop">停止播放</button><br>
-      <van-image width="10rem"
-                 height="10rem"
-                 fit="contain"
-                 src="https://img.yzcdn.cn/vant/cat.jpeg"
-                 rel="external nofollow" />
+      <button @click="search">搜索</button>
     </main>
   </section>
 </template>
 
 <script>
 
-//import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
-//let vConsole = new VConsole() // 初始化
+import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
+let vConsole = new VConsole() // 初始化
 const MiniApp = window.MiniApp
 export default {
   name: 'Home',
@@ -64,7 +60,7 @@ export default {
       });
       this.MusicPlayer.setData({
         album_audio_ids: MiniApp.getSongs({
-          album_audio_ids: ["32072514", "108735213"],
+          album_audio_ids: [51872078, 197791851],//["32072514", "108735213"],
           success: () => {
             alert('成功');
           },
@@ -78,6 +74,21 @@ export default {
     },
     stop () {
       this.MusicPlayer.stop()
+    },
+    search () {
+      MiniApp.searchSource({
+        type: 1,
+        keyword: "只因你太美",
+        page: 1,
+        pageSize: 2,
+        success: function (data) {
+          console.log(data);
+          this.MusicPlayer.setData({
+            album_audio_ids: [data.song_data_list[0].album_audio_id, data.song_data_list[1].album_audio_id]
+          })
+          this.MusicPlayer.play()
+        }
+      })
     }
   }
 }
