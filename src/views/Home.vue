@@ -1,19 +1,18 @@
 <template>
-  <section class="home">
-    <main>
-      <img alt="logo"
-           src="@/assets/img/logo.png" />
-      <div class="home__title">Hello!</div>
-      <button class="button"
-              @click="music">音乐</button><br>
-      <button class="button"
-              @click="playToggle">{{playStatus}}</button><br>
-      <button class="button"
-              @click="previous">上一首</button><br>
-      <button class="button"
-              @click="next">下一首</button><br>
-    </main>
-  </section>
+  <div class="main">
+    <button class="button"
+            @click="login">登录</button><br>
+    <button class="button"
+            @click="music">音乐</button><br>
+    <button class="button"
+            @click="playToggle">{{playStatus}}</button><br>
+    <button class="button"
+            @click="previous">上一首</button><br>
+    <button class="button"
+            @click="next">下一首</button><br>
+    <audio :src="mp3"></audio>
+  </div>
+
 </template>
 
 <script>
@@ -25,6 +24,7 @@ export default {
   name: 'Home',
   data () {
     return {
+      mp3: null,
       playStatus: '暂停播放',
       MusicPlayer: null,
       images: [
@@ -34,48 +34,26 @@ export default {
     }
   },
   created () {
-    this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: false })
+    this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
   },
   methods: {
-    yuhou () {
-      MiniApp.showModal({
-        title: '提示',
-        content: '这是一个模态弹窗',
-        success (res) {
-          if (res.confirm) {
-            console.log('用户点击确定');
-          } else if (res.cancel) {
-            console.log('用户点击取消');
-          }
-        }
-      });
-      MiniApp.showToast({
-        title: '成功',
-        icon: 'success',
-        duration: 2000,
-        mask: true
-      });
-    },
     music () {
-      MiniApp.showToast({
-        title: '播放音乐中',
-        icon: 'success',
-        duration: 2000,
-        mask: true
-      });
-      this.MusicPlayer.setData({
-        album_audio_ids: MiniApp.getSongs({
-          album_audio_ids: [32072514, 108735213],//["32072514", "108735213"],
-          success: () => {
-            alert('成功');
-          },
-          fail (errMsg, errCode) {
-            alert(errMsg, errCode);
-          }
-        }
-        )
+      this.MusicPlayer.setDataUrl({
+        "url": "http://fs.open.kugou.com/3381df8a1f1dff47bccdf3cfbc7ea7aa/5d906167/G005/M06/1A/0D/pYYBAFS-HI-ARBxrADMdDZ2OLOs097.mp3"
       })
-      this.MusicPlayer.play()
+      //判断是否可用 播放器
+      const errMessage = MiniApp.canIUse('MusicPlayer')
+      console.log('是否可用', errMessage.errMsg, errMessage.value);
+      this.MusicPlayer.play({
+        success: function () {
+          console.log('正在播放中');
+
+        },
+        fail: function () {
+          console.log('播放失败!');
+        }
+      })
+      //this.mp3 = 
     },
     playToggle () {
       this.MusicPlayer.playToggle()
@@ -89,41 +67,35 @@ export default {
     },
     next () {
       this.MusicPlayer.playNext()
-    }
+    },
+    login () {
+      MiniApp.listenOpenLogin({
+        success (res) {
+          console.log(res);
+        },
+        fail (res) {
+          console.log(res);
+        },
+        complete (res) {
+          console.log(res);
+        }
+      })
+    },
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .button {
-  width: 50px;
-  height: 50px;
+  width: 120px;
+  height: 120px;
   background-color: #61dafb;
+  margin: 10px;
 }
-.home {
-  height: 100%;
-  width: 100%;
-  background-color: #282c34;
-  display: flex;
-  &__title {
-    font-size: 60px;
-    margin-top: 40px;
-    color: #ffffff;
-  }
-
-  &__link {
-    margin-top: 20px;
-    text-decoration: underline;
-    color: #61dafb;
-  }
-
-  main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    flex: 1;
-    text-align: center;
-  }
+.main {
+  padding: 20px;
+  left: 40%;
+  top: 30%;
+  position: relative;
 }
 </style>
