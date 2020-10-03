@@ -1,7 +1,24 @@
-const { MiniAppZipWebpackPlugin, getEntries } = require('@kugou-miniapp/cli-service')
-const { prepareUrls } = require('@kugou-miniapp/cli-shared-utils')
+const {
+  MiniAppZipWebpackPlugin,
+  getEntries
+} = require('@kugou-miniapp/cli-service')
+const {
+  prepareUrls
+} = require('@kugou-miniapp/cli-shared-utils')
 
 module.exports = {
+  devServer: {
+    proxy: {
+      //请求路径 带有 / demo 的走代理 http://localhost:8081/
+      '/demo': {
+        target: 'http://localhost:8081/dev-api', //代理为什么 ip:端口
+        changeOrigin: true, //允许跨域
+        pathRewrite: {
+          '^/demo': '' //表示将路径重写为 http://localhost:8081/demo
+        }
+      }
+    },
+  },
   chainWebpack: config => {
     config
       .externals({
@@ -23,19 +40,15 @@ module.exports = {
 
     if (process.env.NODE_ENV === 'production') {
       config
-      .plugin('mini-app-zip')
-      .use(MiniAppZipWebpackPlugin, [
-        {
-          r: [
-            {
-              name: "index",
-              content: "all"
-            }
-          ],
+        .plugin('mini-app-zip')
+        .use(MiniAppZipWebpackPlugin, [{
+          r: [{
+            name: "index",
+            content: "all"
+          }],
           t: 'dist',
           d: 'dist'
-        }
-      ])
+        }])
     }
   },
   pages: getEntries(),

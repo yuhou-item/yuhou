@@ -2,16 +2,10 @@
   <div>
     <b-container>
       <b-row>
-        <div class="media"
-             style="margin-top:40px;">
-          <div class="media-body">
-            <h5 class="mt-0 mb-1">Media object</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-          </div>
-          <img class="ml-3"
-               src="@/assets/img/logo.png"
-               alt="Generic placeholder image">
-        </div>
+        <b-container>
+          <p style="margin:50px;"
+             class="m-text">hello yuhou </p>
+        </b-container>
       </b-row>
       <b-row>
         <b-container class="main">
@@ -32,12 +26,7 @@
                               :key="index"
                               caption="First slide"
                               text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-                              img-src="img"></b-carousel-slide>
-
-            <!-- Slides with custom text -->
-            <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-              <h1>Hello world!</h1>
-            </b-carousel-slide>
+                              :img-src="img"></b-carousel-slide>
           </b-carousel>
         </b-container>
       </b-row>
@@ -52,18 +41,37 @@
         <b-container>
           <b-row>
             <b-col class="col-lg-2">
-              <b-button @click="playPrevious">&laquo;</b-button>
+              <b-button>&laquo;</b-button>
             </b-col>
             <b-col>
-              <b-button :class="playClass"
+              <b-button class="col-lg-10"
+                        :class="playClass"
                         @click="play">{{playText}}</b-button>
             </b-col>
             <b-col class="col-lg-2">
-              <b-button @click="playNext">&raquo;</b-button>
+              <b-button>&raquo;</b-button>
             </b-col>
             <b-col class="col-lg-2">
               <b-button @click="search">搜歌</b-button>
             </b-col>
+          </b-row>
+          <b-row>
+            <b-container style="margin:50px;">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <button class="btn btn-outline-secondary"
+                          type="button"
+                          @click="changeSong">切换歌曲</button>
+                </div>
+                <input type="text"
+                       class="form-control mb-3"
+                       placeholder=""
+                       aria-label=""
+                       v-model="songName"
+                       aria-describedby="basic-addon1">
+              </div>
+
+            </b-container>
           </b-row>
         </b-container>
       </b-row>
@@ -73,16 +81,23 @@
 
 <script>
 const MiniApp = window.MiniApp
+import axios from 'axios'
 export default {
   name: 'home',
   data () {
     return {
+      songName: '',//搜索关键字
       slide: 0,
       sliding: null,
-      playText: '播放',
-      playClass: 'btn btn-success',
-      MusicPlayer: null,
-      image_list: []
+      MusicPlayer: null,//音乐播放器实例
+      playText: '播放',//播放|暂停 的文本显示信息
+      playClass: 'btn btn-success',//播放|暂停 样式
+      image_list: null,//搜索到的歌曲的两张图
+      songs_list: new Object(),//搜索到的歌曲列表
+      song_msg: null,//当前播放的歌曲的详细信息
+      layer: null,
+      jquery: null,
+      album_audio_ids: null,//搜索到的歌曲id列表
     }
   },
   created () {
@@ -90,6 +105,8 @@ export default {
   },
   mounted () {
     var slider = layui.slider;
+    this.layer = layui.layer;
+    this.jquery = layui.jquery;
     //渲染
     slider.render({
       elem: '#slideTest1' //绑定元素
@@ -101,6 +118,8 @@ export default {
     //初始化 播放器
     //获取播放器实例
     this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
+
+
   },
   methods: {
     onSlideStart (slide) {
@@ -114,47 +133,104 @@ export default {
       if (this.playText === '播放') {
         this.playClass = 'btn btn-warning'
         this.playText = '暂停'
-        this.MusicPlayer.setData({
-          album_audio_ids: ["32072514", "108735213"]
-        })
-        this.MusicPlayer.play()
       }
       else {
         this.playClass = 'btn btn-success'
         this.playText = '播放'
-        this.MusicPlayer.stop()
       }
+      this.MusicPlayer.playToggle()
+    },
+    searchSong (word) {
+      let that = this
+      MiniApp.searchSource({
+        type: 1,
+        keyword: word,
+        page: 1,
+        pageSize: 2,
+        success: function (songs) {
+          //歌曲id
+          that.album_audio_ids = [songs.song_data_list[0].album_audio_id, songs.song_data_list[1].album_audio_id]
 
+          that.MusicPlayer.setData({
+            album_audio_ids: that.album_audio_ids
+          })
 
+          //歌曲信息
+          that.song_msg = MiniApp.getSongs({
+            album_audio_ids: that.album_audio_ids
+          })
+
+          //设置专辑图片
+          that.image_list = new Array()
+          that.image_list.push(songs.song_data_list[0].album_sizable_cover.replace('{size}/', ''))
+          that.image_list.push(songs.song_data_list[1].album_sizable_cover.replace('{size}/', ''))
+          that.sendMsgToPC(songs.song_data_list[1].album_sizable_cover.replace('{size}', '400/400'), { type: 'get' })
+          that.MusicPlayer.play()
+        },
+        error: function (err) {
+          console.error(err)
+        }
+      })
     },
     //搜歌按钮
     search () {
       //搜歌测试
-      const songs = this.searchSong('十年')
-      console.log(songs);
+      this.searchSong('李荣浩')
       //设置播放器数据
+      /**/
     },
-    //播放上一首
-    playPrevious () {
-
+    //将信息发送到我的电脑的后台服务器，因为傻逼的 vconsole 不能复制调试信息
+    sendMsgToPC (msg, obj) {
+      if (obj.type === 'get') {//get 请求
+        axios.get("/demo/kugou/receive", {
+          params: { "msg": msg }
+        }).then(res => {
+          console.log('请求成功', res);
+        }).catch(err => {
+          console.log('请求失败', err);
+        })
+      } else {// post 请求
+        axios.post("/demo/kugou/receive", {
+          params: { "msg": msg }
+        }).then(res => {
+          console.log('请求成功', res);
+        }).catch(err => {
+          console.log('请求失败', err);
+        })
+      }
     },
-
-    //播放下一首
-    playNext () {
-
-    },
-    searchSong (keyword) {
-      var songs = null
-      MiniApp.searchSource({
-        type: 1,
-        keyword: keyword,
-        page: 1,
-        pageSize: 2,
+    //获取mv信息
+    getMv (mvIdList) {
+      let that = this
+      MiniApp.getMVsDetail({
+        mv_ids: mvIdList,
         success: function (res) {
-          songs = res
+          console.log(JSON.stringify(res));
+          that.sendMsgToPC('res', { type: 'post' })
+        },
+        error: function (err) {
+          console.error(err);
         }
       })
-      return songs
+    },
+    //根据用户填写的歌曲，动态切换歌曲并播放
+    changeSong () {
+      console.log('名：', this.songName);
+      this.searchSong(this.songName)
+    },
+    //更换歌曲时，更新进度条的最大值，单位是 秒，
+    updateMaxProcess (max) {
+
+    },
+    //跳转到指定播放位置 ,单位，秒
+    seekToPosition (second) {
+      this.seek({ position: second })
+    },
+
+    //各种测试
+    test () {
+      //1 测试 获取 mv
+      this.getMv(["159059"])
     },
   },
 }
@@ -163,5 +239,9 @@ export default {
 <style>
 .main {
   margin-top: 100px;
+}
+.m-text {
+  text-align: center;
+  color: aqua;
 }
 </style>
