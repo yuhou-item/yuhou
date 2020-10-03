@@ -97,28 +97,34 @@ export default {
       song_msg: null,//当前播放的歌曲的详细信息
       layer: null,
       jquery: null,
+      slider: null,
+      song_length: null,
       album_audio_ids: null,//搜索到的歌曲id列表
+      ins1: null,//滑块
     }
   },
   created () {
 
   },
   mounted () {
-    var slider = layui.slider;
+    this.slider = layui.slider;
     this.layer = layui.layer;
     this.jquery = layui.jquery;
     //渲染
-    slider.render({
+    let that = this
+    this.ins1 = this.slider.render({
       elem: '#slideTest1' //绑定元素
       , change: function (value) {
         console.log(value) //动态获取滑块数值
-        console.log('滑块发生变化')
+        // 指定位置播放歌曲
+        that.seekToPosition(value)
+        console.log('value变化了1', value);
       }
     })
     //初始化 播放器
     //获取播放器实例
     this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
-
+    console.log("猪猪啊看那个:", this.MusicPlayer);
 
   },
   methods: {
@@ -141,6 +147,8 @@ export default {
       this.MusicPlayer.playToggle()
     },
     searchSong (word) {
+
+
       let that = this
       MiniApp.searchSource({
         type: 1,
@@ -150,15 +158,26 @@ export default {
         success: function (songs) {
           //歌曲id
           that.album_audio_ids = [songs.song_data_list[0].album_audio_id, songs.song_data_list[1].album_audio_id]
-
+          console.log('zhuzhuakgn', that.MusicPlayer);
           that.MusicPlayer.setData({
             album_audio_ids: that.album_audio_ids
           })
 
           //歌曲信息
+          let then = that
           that.song_msg = MiniApp.getSongs({
-            album_audio_ids: that.album_audio_ids
+            album_audio_ids: that.album_audio_ids,
+            success: function (res) {
+              console.log("失败！！！！！", res)
+              //动态设置歌曲长度
+              then.song_length = parseInt(res.song_data_list[0].audio_info.duration)
+              then.updateMaxProcess(then.song_length)
+            },
+            error: function (err) {
+              console.error('error 失败！！！！！ error', error);
+            }
           })
+          console.log('歌曲长度,', that.song_length);
 
           //设置专辑图片
           that.image_list = new Array()
@@ -205,7 +224,6 @@ export default {
       MiniApp.getMVsDetail({
         mv_ids: mvIdList,
         success: function (res) {
-          console.log(JSON.stringify(res));
           that.sendMsgToPC('res', { type: 'post' })
         },
         error: function (err) {
@@ -215,23 +233,33 @@ export default {
     },
     //根据用户填写的歌曲，动态切换歌曲并播放
     changeSong () {
-      console.log('名：', this.songName);
+      //console.log('名：', this.songName);
       this.searchSong(this.songName)
     },
     //更换歌曲时，更新进度条的最大值，单位是 秒，
     updateMaxProcess (max) {
-
+      let that = this
+      //渲染
+      this.ins1 = this.slider.render({
+        elem: '#slideTest1' //绑定元素
+        , change: function (value) {
+          console.log('value变化了2', value);
+          // 指定位置播放歌曲
+          that.seekToPosition(value)
+        },
+        max: max//设置最大值为歌曲的毫秒数
+      })
     },
     //跳转到指定播放位置 ,单位，秒
     seekToPosition (second) {
-      this.seek({ position: second })
+      this.MusicPlayer.seek({ position: second })
     },
 
     //各种测试
-    test () {
-      //1 测试 获取 mv
-      this.getMv(["159059"])
-    },
+    /* test () {
+       //1 测试 获取 mv
+       this.getMv(["159059"])
+     },*/
   },
 }
 </script>
