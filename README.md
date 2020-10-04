@@ -12,7 +12,7 @@ npm run dev
 ## 获取最新版本的
 git pull https://github.com/KaiHavertz/houshuang.git
 
-## 提交到自己 的远程仓库sss
+## 提交到自己 的远程仓库(sss)
 git push -u origin devKugouApp
 
 
