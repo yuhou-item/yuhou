@@ -12,5 +12,5 @@ npm run dev
 ## 获取最新版本的
 git pull https://github.com/KaiHavertz/houshuang.git
 
-## 我是猪猪康
+## 我是猪猪
 
