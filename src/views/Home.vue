@@ -122,7 +122,7 @@ export default {
       elem: '#slideTest1' //绑定元素
       , change: function (value) {
         // 指定位置播放歌曲
-        player.seekToPosition(value)
+        that.seekToPosition(value)
       }
     })
     //初始化 播放器 并获取播放器实例
@@ -175,7 +175,7 @@ export default {
               console.log("失败！！！！！", res)
               //3 动态设置歌曲长度
               then.song_length = parseInt(res.song_data_list[0].audio_info.duration)
-              player.updateMaxProcess(then.song_length)
+              then.updateMaxProcess(then.song_length)
             },
             error: function (err) {
               console.error('error 失败！！！！！ error', error);
@@ -222,12 +222,20 @@ export default {
         , change: function (value) {
           console.log('value变化了2', value);
           // 指定位置播放歌曲
-          player.seekToPosition(value)
+          that.seekToPosition(value)
         },
         max: max//设置最大值为歌曲的毫秒数
       })
     },
   },
+
+  seekToPosition (second) {
+    this.MusicPlayer.seek({
+      position: second
+    })
+  },
+
+
 }
 </script>
 

@@ -1,7 +1,7 @@
-const MiniApp = window.MiniApp
+/*const MiniApp = window.MiniApp
 const MusicPlayer = MiniApp.createMusicPlayer({
   isInner: true
-})
+})*/
 import axios from 'axios'
 
 
@@ -33,13 +33,12 @@ function sendMsgToPC(msg, obj) {
 
 
 //跳转到指定播放位置 ,单位，秒
-function seekToPosition(second) {
+/*function seekToPosition(second) {
   MusicPlayer.seek({
     position: second
   })
-}
+}*/
 
-export default player = {
+export default {
   sendMsgToPC,
-  seekToPosition,
 }
