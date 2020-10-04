@@ -2,15 +2,6 @@
   <div>
     <b-container>
       <b-row>
-        <b-container style="margin-top:50px;">
-          <router-link to="/"
-                       class="m-text">back</router-link>
-        </b-container>
-      </b-row>
-      <b-row>
-        <router-view></router-view>
-      </b-row>
-      <b-row>
         <b-container class="main">
           <b-carousel id="carousel-1"
                       no-wrap
@@ -19,14 +10,13 @@
                       controls
                       indicators
                       background="#ababab"
-                      img-width="1024"
-                      img-height="480"
+                      img-width="402500"
+                      img-height="250"
                       style="text-shadow: 1px 1px 2px #333;"
                       @sliding-start="onSlideStart"
                       @sliding-end="onSlideEnd">
             <!-- bootstrap VUE 带文字的轮播图，是歌曲的专辑图片 -->
             <b-carousel-slide v-for="(img,index) in image_list"
-                              style="width:400px;height:400px"
                               :key="index"
                               caption="First slide"
                               text="Nulla vitae elit libero, a pharetra augue mollis interdum."
@@ -35,7 +25,7 @@
         </b-container>
       </b-row>
       <!-- van 滑块 -->
-      <b-container style="margin-top:20px;margin-bottom:20px;">
+      <b-container style="margin-top:10%;margin-bottom:10%;">
         <van-slider v-model="song_value"
                     :step="10"
                     @change="onChange"
@@ -62,7 +52,7 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-container style="margin:50px;">
+            <b-container style="margin:10%;">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <button class="btn btn-outline-secondary"
@@ -82,12 +72,13 @@
           </b-row>
         </b-container>
       </b-row>
+      <YuhouFooter></YuhouFooter>
     </b-container>
   </div>
 </template>
 
 <script>
-
+import YuhouFooter from '@/components/yuhouFooter.vue'
 //初始化 miniapp 注入sdk
 const MiniApp = window.MiniApp
 //导入 与播放器有关的方法
@@ -96,6 +87,9 @@ import player from '@/utils/player.js'
 
 export default {
   name: 'home',
+  components: {
+    YuhouFooter
+  },
   data () {
     return {
 
@@ -125,9 +119,10 @@ export default {
   },
   //初始化播放器，layui 
   mounted () {
-    this.slider = layui.slider;
-    this.layer = layui.layer;
-    this.jquery = layui.jquery;
+    //如果需要使用 layui,需要打开 入口文件导入
+    /* this.slider = layui.slider;
+     this.layer = layui.layer;
+     this.jquery = layui.jquery;*/
     let that = this
     //初始化 播放器 并获取播放器实例
     this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
@@ -247,7 +242,7 @@ export default {
 
 <style>
 .main {
-  margin-top: 50px;
+  margin-top: 10%;
 }
 .m-text {
   text-align: center;

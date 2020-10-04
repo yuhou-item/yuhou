@@ -1,24 +1,19 @@
 <template>
-  <div class="main">
-    <b-row>
-      <b-container style="margin-top:50px;">
-        <router-link to="/"
-                     class="m-text">back</router-link>
-      </b-container>
-    </b-row>
-    <b-row>
-      <router-view></router-view>
-    </b-row>
+  <div>
+    <YuhouFooter></YuhouFooter>
   </div>
 
 </template>
 
 <script>
 
-
+import YuhouFooter from '@/components/yuhouFooter.vue'
 const MiniApp = window.MiniApp
 export default {
   name: 'test',
+  components: {
+    YuhouFooter
+  },
 }
 </script>
 

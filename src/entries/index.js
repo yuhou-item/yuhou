@@ -17,21 +17,27 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
 
-
+/*
 // 引入 MUI （@表示 src 文件夹）
 import mui from '@/assets/mui/mui.min.js'
 import '@/assets/mui/mui.min.css'
 // 挂载到VUE实例上
 Vue.prototype.$mui = mui
+*/
 
+/*
 //引入 ant
 import '@/assets/ant/antui.js'
 import '@/assets/ant/antui.css'
 import '@/assets/ant/search.css'
+*/
 
+/*
 //引入 layui
 import layui from '@/assets/layui/layui.all.js'
 import '@/assets/layui/css/layui.css'
+*/
+
 
 //引入 bootstrap vue
 import {

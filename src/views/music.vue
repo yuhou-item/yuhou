@@ -1,50 +1,32 @@
 <template>
-  <div class="main">
+  <b-container>
     <b-row>
       <b-container>
-        <router-link to="/"
-                     style="margin-top:50px;maring-bottom:20px;"
-                     class="m-text">back</router-link>
+        <AudioPlayer :audio-list="audioList"
+                     :before-play="onBeforePlay"
+                     @ended="onEnded"
+                     @timeupdate="onTimeUpdate"
+                     @pause="onPause" />
       </b-container>
     </b-row>
-    <b-row>
-      <router-view></router-view>
-    </b-row>
-    <van-swipe class="my-swipe"
-               :autoplay="3000"
-               indicator-color="white">
-      <van-swipe-item v-for="(image, index) in images"
-                      :key="index">
-        <img src="image"
-             alt="">
-      </van-swipe-item>
-    </van-swipe>
-    <AudioPlayer :audio-list="audioList"
-                 :before-play="onBeforePlay"
-                 @ended="onEnded"
-                 @timeupdate="onTimeUpdate"
-                 @loadedmetadata="onLoadedmetadata"
-                 @pause="onPause" />
-  </div>
+    <YuhouFooter></YuhouFooter>
+  </b-container>
 
 </template>
 
 <script>
 import { AudioPlayer } from '@liripeng/vue-audio-player'
 import '@liripeng/vue-audio-player/lib/vue-audio-player.css'
-
+import YuhouFooter from '@/components/yuhouFooter.vue'
 const MiniApp = window.MiniApp
 export default {
   name: 'music',
   components: {
-    AudioPlayer
+    AudioPlayer,
+    YuhouFooter
   },
   data () {
     return {
-      images: [
-        'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2764393040,1235762150&fm=26&gp=0.jpg',
-        'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1498462728,1887616453&fm=26&gp=0.jpg'
-      ],
       audioList: [
         'http://txh-cdn.96qbhy.com/20180817175211dtC1vE3z.mp3',
         'http://txh-cdn.96qbhy.com/20181106105737sOcozMqw.mp3'
@@ -52,23 +34,18 @@ export default {
       song_data_list: null,
       playStatus: '暂停播放',
       MusicPlayer: null,
-      images: [
-        'https://img.yzcdn.cn/vant/apple-1.jpg',
-        'https://img.yzcdn.cn/vant/apple-2.jpg'
-      ]
     }
   },
   created () {
-    this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
+    //this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
   },
   methods: { // 播放前做的事
     onBeforePlay (next) {
       console.log('这里可以做一些事情...')
-      this.MusicPlayer.setData({
-        album_audio_ids: ["32072514", "108735213"]
-      })
-      this.MusicPlayer.play()
-      next() // 开始播放
+      /*  this.MusicPlayer.setData({
+          album_audio_ids: ["32072514", "108735213"]
+        })
+        this.MusicPlayer.play()*/
     },
     // 当前的播放位置发送改变时触发
     onTimeUpdate (event) {
@@ -87,8 +64,6 @@ export default {
       }
     },
     onPause () {
-      this.MusicPlayer.pause()
-      this.$refs.audio.pause()
       this.$nextTick(() => {
         clearInterval(this.timer)
         this.timer = null
@@ -107,26 +82,26 @@ export default {
     }
     ,
     login () {
-      MiniApp.searchSource({
-        type: 1,
-        keyword: "你好",
-        page: 1,
-        pageSize: 2,
-        success: function (res) {
-          console.log(res);
-        }
-      })
-      MiniApp.listenOpenLogin({
-        success (res) {
-          console.log(res);
-        },
-        fail (res) {
-          console.log(res);
-        },
-        complete (res) {
-          console.log(res);
-        }
-      })
+      /*  MiniApp.searchSource({
+          type: 1,
+          keyword: "你好",
+          page: 1,
+          pageSize: 2,
+          success: function (res) {
+            console.log(res);
+          }
+        })
+        MiniApp.listenOpenLogin({
+          success (res) {
+            console.log(res);
+          },
+          fail (res) {
+            console.log(res);
+          },
+          complete (res) {
+            console.log(res);
+          }
+        })*/
     },
   }
 }
