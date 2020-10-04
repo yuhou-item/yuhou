@@ -1,5 +1,15 @@
 <template>
   <div class="main">
+    <b-row>
+      <b-container>
+        <router-link to="/"
+                     style="margin-top:50px;maring-bottom:20px;"
+                     class="m-text">back</router-link>
+      </b-container>
+    </b-row>
+    <b-row>
+      <router-view></router-view>
+    </b-row>
     <van-swipe class="my-swipe"
                :autoplay="3000"
                indicator-color="white">
@@ -25,7 +35,7 @@ import '@liripeng/vue-audio-player/lib/vue-audio-player.css'
 
 const MiniApp = window.MiniApp
 export default {
-  name: 'Home',
+  name: 'music',
   components: {
     AudioPlayer
   },
@@ -131,7 +141,7 @@ export default {
 }
 .main {
   padding: 20px;
-  top: 60%;
+  top: 20%;
   position: relative;
 }
 .my-swipe .van-swipe-item {
