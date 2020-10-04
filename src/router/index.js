@@ -25,6 +25,17 @@ const routes = [{
     name: 'test',
     component: () => import('@/views/test.vue')
   },
+  //下面是其他共用的组件
+  {
+    path: '/yuhouFooter',
+    name: 'yuhouFooter',
+    component: () => import('@/components/yuhouFooter.vue')
+  },
+  {
+    path: '/yuhouIndex',
+    name: 'yuhouIndex',
+    component: () => import('@/components/yuhouIndex.vue')
+  },
 ]
 
 const router = new VueRouter({
