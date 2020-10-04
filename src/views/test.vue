@@ -1,18 +1,20 @@
 <template>
   <div>
+    <YuhouNav></YuhouNav>
     <YuhouFooter></YuhouFooter>
   </div>
 
 </template>
 
 <script>
-
+import YuhouNav from '@/components/yuhouNav.vue'
 import YuhouFooter from '@/components/yuhouFooter.vue'
 const MiniApp = window.MiniApp
 export default {
   name: 'test',
   components: {
-    YuhouFooter
+    YuhouFooter,
+    YuhouNav,
   },
 }
 </script>

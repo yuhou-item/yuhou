@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-container>
+      <YuhouNav></YuhouNav>
       <b-row>
         <b-container class="main">
           <b-carousel id="carousel-1"
@@ -79,6 +80,7 @@
 
 <script>
 import YuhouFooter from '@/components/yuhouFooter.vue'
+import YuhouNav from '@/components/yuhouNav.vue'
 //初始化 miniapp 注入sdk
 const MiniApp = window.MiniApp
 //导入 与播放器有关的方法
@@ -88,7 +90,9 @@ import player from '@/utils/player.js'
 export default {
   name: 'home',
   components: {
-    YuhouFooter
+    YuhouNav,
+    YuhouFooter,
+    YuhouNav,
   },
   data () {
     return {
