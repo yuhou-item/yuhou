@@ -1,5 +1,6 @@
 <template>
   <b-container>
+    <YuhouNav></YuhouNav>
     <b-row>
       <b-container>
         <AudioPlayer :audio-list="audioList"
@@ -17,13 +18,15 @@
 <script>
 import { AudioPlayer } from '@liripeng/vue-audio-player'
 import '@liripeng/vue-audio-player/lib/vue-audio-player.css'
+import YuhouNav from '@/components/yuhouNav.vue'
 import YuhouFooter from '@/components/yuhouFooter.vue'
 const MiniApp = window.MiniApp
 export default {
   name: 'music',
   components: {
+    YuhouNav,
     AudioPlayer,
-    YuhouFooter
+    YuhouFooter,
   },
   data () {
     return {

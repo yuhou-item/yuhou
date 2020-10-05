@@ -1,16 +1,14 @@
 <template>
   <div>
+    <YuhouNav></YuhouNav>
     <YuhouFooter></YuhouFooter>
   </div>
 </template>
 
 <script>
-//初始化 miniapp 注入sdk
-const MiniApp = window.MiniApp;
-//导入 与播放器有关的方法
-import player from "@/utils/player.js";
-
-import YuhouFooter from "@/components/yuhouFooter.vue";
+import YuhouNav from '@/components/yuhouNav.vue'
+import YuhouFooter from '@/components/yuhouFooter.vue'
+const MiniApp = window.MiniApp
 export default {
   name: "test",
   data() {
@@ -21,6 +19,7 @@ export default {
   },
   components: {
     YuhouFooter,
+    YuhouNav,
   },
   created() {},
   mounted() {
