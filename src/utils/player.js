@@ -31,6 +31,29 @@ function sendMsgToPC(msg, obj) {
   }
 }
 
+/**将歌曲时长转为时间 @param duration [number] duration 毫秒 */
+function parseDurationToTime(duration) {
+  var date = new Date(duration);
+  let minute = date.getMinutes()
+  let second = date.getSeconds()
+  if (minute < 10)
+    minute = '0' + minute
+  if (second < 10)
+    second = '0' + second
+  return `${minute}:${second}`
+}
+
+//判断是不是全面屏手机
+function judgeBigScreen() {
+  const res = window.MiniApp.getSystemInfoSync()
+  let result = false;
+  const rate = res.windowHeight / res.windowWidth;
+  let limit = res.windowHeight == res.screenHeight ? 1.8 : 1.65; // 临界判断值
+  if (rate > limit) {
+    result = true;
+  }
+  return result;
+}
 
 //跳转到指定播放位置 ,单位，秒
 /*function seekToPosition(second) {
@@ -41,4 +64,6 @@ function sendMsgToPC(msg, obj) {
 
 export default {
   sendMsgToPC,
+  parseDurationToTime,
+  judgeBigScreen,
 }

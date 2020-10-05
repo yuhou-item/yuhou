@@ -1,3 +1,4 @@
+<!-- 鱼猴音乐播放器组件，使用了 开源的 audio vue 组件-->
 <template>
   <b-container>
     <YuhouNav :navTitle="navTitle"> </YuhouNav>
@@ -5,9 +6,6 @@
       <b-container>
         <AudioPlayer :audio-list="audioList"
                      :before-play="onBeforePlay"
-                     :duration="1111"
-                     :currentPlayIndex="22"
-                     :currentTime="12"
                      @ended="onEnded"
                      @play-prev="onPlayPrev"
                      @play-next="onPlayNext"
@@ -48,8 +46,6 @@ export default {
       playStatus: '暂停播放',
       MusicPlayer: null,
       navTitle: '音乐',//传递给子组件的标题
-
-      //个性化配置
     }
   },
   created () {
@@ -127,8 +123,8 @@ export default {
 }
 .my-swipe .van-swipe-item {
   color: #fff;
-  font-size: 50px;
-  line-height: 250px;
+  font-size: 20px;
+  line-height: 150px;
   text-align: center;
   background-color: #39a9ed;
   top: 1%;

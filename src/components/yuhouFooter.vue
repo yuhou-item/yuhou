@@ -18,6 +18,11 @@
                        icon="video-o">
         test
       </van-tabbar-item>
+      <van-tabbar-item replace
+                       to="/setting"
+                       icon="setting-o">
+        setting
+      </van-tabbar-item>
     </van-tabbar>
   </b-container>
 </template>

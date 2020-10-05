@@ -8,34 +8,71 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'index',
-    component: () => import('@/views/index.vue')
+    component: () => import('@/views/index.vue'),
+    meta: {
+      title: '鱼猴大本营'
+    },
   },
   {
     path: '/music',
     name: 'music',
-    component: () => import('@/views/music.vue')
+    component: () => import('@/views/music.vue'),
+    meta: {
+      title: 'music'
+    },
   },
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/views/home.vue')
+    component: () => import('@/views/home.vue'),
+    meta: {
+      title: '首页'
+    },
   },
   {
     path: '/test',
     name: 'test',
-    component: () => import('@/views/test.vue')
+    component: () => import('@/views/test.vue'),
+    meta: {
+      title: '测试'
+    },
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: () => import('@/views/test.vue'),
+    meta: {
+      title: '设置'
+    },
   },
   //下面是其他共用的组件
   {
     path: '/yuhouFooter',
     name: 'yuhouFooter',
-    component: () => import('@/components/yuhouFooter.vue')
+    component: () => import('@/components/yuhouFooter.vue'),
+    meta: {
+      title: 'yuhou'
+    },
   },
+  //
   {
     path: '/yuhouIndex',
     name: 'yuhouIndex',
-    component: () => import('@/components/yuhouIndex.vue')
+    component: () => import('@/components/yuhouIndex.vue'),
+    meta: {
+      title: 'yuhou'
+    },
   },
+  //搜歌组件
+  {
+    path: '/yuhouSearchSong',
+    name: 'yuhouSearchSong',
+    component: () => import('@/components/yuhouSearchSong.vue'),
+    meta: {
+      title: 'yuhou'
+    },
+  },
+
 ]
 
 const router = new VueRouter({
@@ -52,6 +89,12 @@ router.afterEach((to, from, next) => {
     MusicPlayer.stop()
     next();
   }
+})
+router.beforeEach((to, from, next) => {
+  // 即将跳转的路由地址
+  document.title = to.meta.title
+  next();
+
 })
 
 export default router

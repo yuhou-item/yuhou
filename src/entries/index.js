@@ -32,11 +32,13 @@ import '@/assets/ant/antui.css'
 import '@/assets/ant/search.css'
 */
 
-/*
+
 //引入 layui
+/*
 import layui from '@/assets/layui/layui.all.js'
 import '@/assets/layui/css/layui.css'
 */
+
 
 
 //引入 bootstrap vue
