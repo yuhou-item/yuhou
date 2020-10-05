@@ -83,7 +83,7 @@ router.afterEach((to, from, next) => {
   // 即将跳转的路由地址
   if (from.path == '/home') { //说明退出 home 界面，停止播放
     //初始化 播放器 并获取播放器实例
-    MusicPlayer = MiniApp.createMusicPlayer({
+    const MusicPlayer = MiniApp.createMusicPlayer({
       isInner: true
     })
     MusicPlayer.stop()
