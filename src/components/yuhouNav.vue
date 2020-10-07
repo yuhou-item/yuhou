@@ -1,6 +1,6 @@
 <!-- 共用组件,-->
 <template>
-  <div>
+  <div :class="{'big-screen-margin-top':big_screen_margin_top}">
     <van-nav-bar left-text="返回"
                  @click-left="back"
                  left-arrow>
@@ -14,10 +14,14 @@
 </template>
 
 <script>
+//导入 与播放器有关的方法
+import utils from '@/utils/utils.js'
 export default {
   name: 'yuhouNav',
   data () {
     return {
+      //自定义样式相关
+      big_screen_margin_top: utils.judgeBigScreen(),
     }
   },
   //接受来自父组件的 自定义标题内容
@@ -29,7 +33,6 @@ export default {
     }
   },
   mounted () {
-    console.log('值：', this.navTitle);
   },
   methods: {
     //返回首页 index.vue
@@ -45,5 +48,10 @@ export default {
 }
 .show {
   display: block;
+}
+
+/**全面屏适配，增加与顶部的外边距 */
+.big-screen-margin-top {
+  margin-top: 150px;
 }
 </style>

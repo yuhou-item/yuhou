@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container :class="{'big-screen-margin-top':big_screen_margin_top}">
+    <b-container>
       <van-row>
         <!-- 搜歌组件,传递搜索方法给子组件调用 -->
         <YuhouSearchSong @father-search-song="searchSong">
@@ -75,22 +75,25 @@
             <van-grid-item>
               <b-button>&raquo;</b-button>
             </van-grid-item>
-            <van-grid-item>
-              <b-button @click="testPhone">test</b-button>
-            </van-grid-item>
           </van-grid>
         </b-container>
       </van-row>
-      获取用户手机信息
-      {{big_screen_margin_top}}
       <!-- 测试按钮，代码-->
-      <YuhouFooter></YuhouFooter>
+
+      <van-row>
+        <YuhouFooter></YuhouFooter>
+      </van-row>
+
+      <!-- 检测返回 组件 -->
+      <van-row>
+        <YuhouBack></YuhouBack>
+      </van-row>
     </b-container>
   </div>
 </template>
 
 <script>
-
+import YuhouBack from '@/components/yuhouBack.vue'
 import YuhouFooter from '@/components/yuhouFooter.vue'
 import YuhouNav from '@/components/yuhouNav.vue'
 import YuhouSearchSong from '@/components/yuhouSearchSong.vue'
@@ -98,7 +101,7 @@ import YuhouSearchSong from '@/components/yuhouSearchSong.vue'
 const MiniApp = window.MiniApp
 //导入 与播放器有关的方法
 import player from '@/utils/player.js'
-
+import utils from '@/utils/utils.js'
 import { Toast } from 'vant';
 export default {
   name: 'home',
@@ -106,15 +109,13 @@ export default {
     YuhouSearchSong,
     YuhouFooter,
     YuhouNav,
+    YuhouBack,
   },
   created () {
 
   },
   data () {
     return {
-      //自定义样式相关
-      big_screen_margin_top: player.judgeBigScreen(),
-
       /**bootstrap VUE 相关 */
       slide: 0,
       sliding: null,
@@ -130,7 +131,7 @@ export default {
       song_value: 0, //歌曲当前播放的位置
       album_audio_ids: null,//搜索到的歌曲id列表
       tip_song_value: 0,//歌曲当前播放进度提示
-      tip_song_length: player.parseDurationToTime(0),//歌曲总长度提示
+      tip_song_length: utils.parseDurationToTime(0),//歌曲总长度提示
       stop_time: null,//用于停止定时器
       /**其他 */
       tipValueClass: 'tip-show-value'
@@ -163,8 +164,7 @@ export default {
       //动态设置 滑块长度
       this.stop_time = setInterval(() => {
         this.song_value += 1000;
-        this.tip_song_value = player.parseDurationToTime(this.song_value)
-
+        this.tip_song_value = utils.parseDurationToTime(this.song_value)
       }, 1000)
     },
     /**播放|暂停 */
@@ -185,80 +185,54 @@ export default {
     },
 
     /** 根据关键字，搜索歌曲信息并播放*/
-    getSongs (word) {
-      let that = this
-      MiniApp.searchSource({
-        type: 1,
-        keyword: word,
-        page: 1,
-        pageSize: 2,
-        success: function (songs) {
-          //1 歌曲id
-          that.album_audio_ids = new Array()
-          for (let i = 0; i < songs.song_data_list.length; i++)
-            that.album_audio_ids.push(songs.song_data_list[i].album_audio_id)
-          that.MusicPlayer.setData({
-            album_audio_ids: that.album_audio_ids
-          })
+    setSongMsg (song) {
+      //1
+      this.album_audio_ids = song.album_audio_ids
 
-          //2 歌曲信息
-          let then = that
-          that.song_msg = MiniApp.getSongs({
-            album_audio_ids: that.album_audio_ids,
-            success: function (res) {
-              console.log("失败！！！！！", res)
-              //3 动态设置歌曲长度 /** 更换歌曲时，更新进度条的最大值，单位是 秒，*/
-              then.song_length = parseInt(res.song_data_list[0].audio_info.duration)
-              then.tip_song_length = player.parseDurationToTime(then.song_length)
-              //并且设置播放起始位置为0
-              then.song_value = 0
+      //2，设置歌曲长度
+      this.song_length = parseInt(song.duration)
+      // 并且设置播放起始位置为0
+      this.song_value = 0
+      console.log(typeof (song));
 
+      //3 设置提示语
+      this.tip_song_value = utils.parseDurationToTime(0)
+      this.tip_song_length = utils.parseDurationToTime(this.song_length),//歌曲总长度提示
 
-            },
-            error: function (err) {
-              console.error('error 失败！！！！！ error', error);
-            }
-          })
-          console.log('歌曲长度,', that.song_length);
+        //4  设置专辑图片
+        this.image_list = song.image_list
 
-          //4 设置专辑图片
-          that.image_list = new Array()
-          for (let i = 0; i < songs.song_data_list.length; i++)
-            that.image_list.push(songs.song_data_list[i].album_sizable_cover.replace('{size}/', ''))
-          that.playClass = 'btn btn-warning'
-          that.playText = '暂停'
-        },
-        error: function (err) {
-          console.error(err)
-        }
+      //5 ，设置样式
+      this.playClass = 'btn btn-warning'
+      this.playText = '暂停'
+
+      //6 设置播放歌曲数据
+      this.MusicPlayer.setData({
+        album_audio_ids: song.album_audio_ids
       })
+
     },
-    /** 获取mv信息*/
-    getMv (mvIdList) {
-      let that = this
-      MiniApp.getMVsDetail({
-        mv_ids: mvIdList,
-        success: function (res) {
-          player.sendMsgToPC('res', { type: 'post' })
-        },
-        error: function (err) {
-          console.error(err);
-        }
-      })
-    },
+
     /**根据用户填写的歌曲，动态切换歌曲并播放 */
     searchSong (word) {
-      console.log('名：', word);
-      this.getSongs(word)
-      clearInterval(this.stop_time)
-      this.timer()//定时器，修改滑块和 显示
-    },
-    /** 更换歌曲时，更新进度条的最大值，单位是 秒，*/
+      //获取搜索到的歌曲信息
+      var song = player.searchSong(word, 1, 1, 2)
 
+      //设置歌曲信息
+      this.setSongMsg(song)
+
+      //清除定时器
+      clearInterval(this.stop_time)
+
+      //定时器，修改滑块和 显示
+      this.timer()
+    },
+
+    /** 更换歌曲时，更新进度条的最大值，单位是 秒，*/
     onChange (value) {
       //提示当前是多少时间
       Toast({
-        message: player.parseDurationToTime(value),
+        message: utils.parseDurationToTime(value),
       });
       //当滑块位置发生变化时，切换歌曲的播放位置
       //重新指定播放位置
@@ -315,11 +289,6 @@ export default {
 
 .tip-hidden-value {
   display: block;
-}
-
-/**全面屏适配，增加与顶部的外边距 */
-.big-screen-margin-top {
-  margin-top: 150px;
 }
 
 /**

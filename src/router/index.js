@@ -73,6 +73,13 @@ const routes = [{
     },
   },
 
+  //鱼猴 检测返回组件
+  {
+    path: '/yuhouBack',
+    name: 'yuhouBack',
+    component: () => import('@/components/yuhouBack.vue'),
+  }
+
 ]
 
 const router = new VueRouter({
@@ -86,12 +93,11 @@ router.afterEach((to, from, next) => {
     const MusicPlayer = MiniApp.createMusicPlayer({
       isInner: true
     })
+    //停止播放
     MusicPlayer.stop()
-    next();
   }
 })
 router.beforeEach((to, from, next) => {
-  // 即将跳转的路由地址
   document.title = to.meta.title
   next();
 

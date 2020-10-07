@@ -1,7 +1,7 @@
 <!-- 搜索歌曲组件 -->
 <!-- 共用组件,-->
 <template>
-  <div>
+  <div :class="{'big-screen-margin-top':big_screen_margin_top}">
     <van-nav-bar title="鱼猴听歌"
                  left-text="返回"
                  @click-left="back"
@@ -17,20 +17,23 @@
       <van-search v-model="value"
                   shape="round"
                   @search="searchSong()"
-                  background="#4fc08d"
                   placeholder="请输入搜索关键词" />
     </div>
   </div>
 </template>
 
 <script>
+//导入 与播放器有关的方法
+import utils from '@/utils/utils.js'
+
 export default {
   name: 'yuhouSearchSong',
   data () {
     return {
       isHidden: true,
       value: '',//搜索关键字
-
+      //自定义样式相关
+      big_screen_margin_top: utils.judgeBigScreen(),
     }
   },
   methods: {
@@ -50,7 +53,7 @@ export default {
       //调用父组件的搜歌方法，并播放歌曲等
       //使用 this.$emit(参数1：'接收方法名',参数2：方法参数) //接收方法名 是@后面的方法
       this.$emit('father-search-song', this.value)
-      
+
     },
   }
 }
@@ -61,5 +64,10 @@ export default {
 }
 .show {
   display: block;
+}
+
+/**全面屏适配，增加与顶部的外边距 */
+.big-screen-margin-top {
+  margin-top: 150px;
 }
 </style>
