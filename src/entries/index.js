@@ -32,11 +32,13 @@ import '@/assets/ant/antui.css'
 import '@/assets/ant/search.css'
 */
 
-/*
+
 //引入 layui
+/*
 import layui from '@/assets/layui/layui.all.js'
 import '@/assets/layui/css/layui.css'
 */
+
 
 
 //引入 bootstrap vue
@@ -51,8 +53,10 @@ Vue.use(IconsPlugin)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+
+
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#root')

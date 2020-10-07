@@ -1,111 +1,155 @@
 <template>
   <b-container>
-    <YuhouNav></YuhouNav>
+    <YuhouNav :navTitle="navTitle"> </YuhouNav>
     <b-row>
       <b-container>
-        <AudioPlayer :audio-list="audioList"
-                     :before-play="onBeforePlay"
-                     @ended="onEnded"
-                     @timeupdate="onTimeUpdate"
-                     @pause="onPause" />
+        <button @click="login">用户登录测试</button>
+        <hr>
+        <button @click="collectSong">收藏单曲测试</button>
+        <hr>
+        <button @click="getUserInfo">获取用户信息测试</button>
+        <hr>
+        <button @click="searchAudio">搜索专辑我喜欢测试</button>
+        <hr>
+        <button @click="testEntity">测试实体类</button>
+        <hr>
+        <button @click="exit">退出小程序</button>
+        <hr>
+        <button @click="getLocation">获取用户当前位置</button>
+        <hr>
+        <button @click="getDiskSpaceInfo">获取用户存储空间信息</button>
+        <hr>
+        <van-row>
+          <!-- 显示用户信息-->
+          <ul v-if="userInfo!=null">
+            <li v-for="(value,key,index) in userInfo"
+                :key="index">{{key}}:{{value}}</li>
+
+          </ul>
+        </van-row>
       </b-container>
     </b-row>
     <YuhouFooter></YuhouFooter>
+    <YuhouBack></YuhouBack>
   </b-container>
 
 </template>
 
 <script>
-import { AudioPlayer } from '@liripeng/vue-audio-player'
-import '@liripeng/vue-audio-player/lib/vue-audio-player.css'
+import YuhouBack from '@/components/yuhouBack.vue'
 import YuhouNav from '@/components/yuhouNav.vue'
 import YuhouFooter from '@/components/yuhouFooter.vue'
+import player from '@/utils/player.js'
+import utils from '@/utils/utils.js'
+import Cookies from 'js-cookie' //引入cookie操作依赖
+import system from '@/utils/system.js' //引入miniapp 系方面的操作依赖
 const MiniApp = window.MiniApp
 export default {
   name: 'music',
   components: {
     YuhouNav,
-    AudioPlayer,
     YuhouFooter,
+    YuhouBack,
   },
   data () {
     return {
-      audioList: [
-        'http://txh-cdn.96qbhy.com/20180817175211dtC1vE3z.mp3',
-        'http://txh-cdn.96qbhy.com/20181106105737sOcozMqw.mp3'
-      ],
-      song_data_list: null,
-      playStatus: '暂停播放',
-      MusicPlayer: null,
+      list: new Array(),//存放五种搜索资源方式搜索到的资源
+      /*audioList: [
+        'http://downsc.chinaz.net/Files/DownLoad/sound1/201906/11582.mp3',
+        'http://downsc.chinaz.net/files/download/sound1/201206/1638.mp3',
+        'http://downsc.chinaz.net/Files/DownLoad/sound1/201906/11582.mp3',
+        'https://media.w3.org/2010/05/sintel/trailer.mp4',
+        'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
+      ],*/
+      navTitle: '听歌猜曲',//传递给子组件的标题
+      MusicPlayer: null,//播放器单例
+
+      userInfo: {}//用户信息
     }
   },
-  created () {
-    //this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
-  },
-  methods: { // 播放前做的事
-    onBeforePlay (next) {
-      console.log('这里可以做一些事情...')
-      /*  this.MusicPlayer.setData({
-          album_audio_ids: ["32072514", "108735213"]
-        })
-        this.MusicPlayer.play()*/
-    },
-    // 当前的播放位置发送改变时触发
-    onTimeUpdate (event) {
-      this.$emit('timeupdate', event)
-      console.log('改变播放位置');
-    },
-    onEnded (event) {
-      this.pause()
-      this.currentTimeAfterFormat = this.formatTime(
-        this.$refs.audio.currentTime
-      )
-      this.$emit('ended', event)
-      if (this.isLoop) {
-        this.playNext()
-        this.play()
+  mounted () {
+    //初始化播放器
+    this.MusicPlayer = MiniApp.createMusicPlayer({ isInner: true })
+    //监听事件
+    MiniApp.on({
+      event: 'onLogin',
+      listener () {
+        this.loginOut()
       }
+    });
+  },
+  methods: {
+    //打开登录
+    login () {
+      system.login()
     },
-    onPause () {
-      this.$nextTick(() => {
-        clearInterval(this.timer)
-        this.timer = null
-        this.isPlaying = false
-        this.$emit('pause')
-        console.log('暂停');
+
+    //退出登录
+    loginOut () {
+      console.log('成功退出登录');
+    },
+
+    //收藏到我喜欢测试
+    collectSong () {
+      console.log('我进来了');
+      var song = player.searchSong('有为', 1, 1, 2)
+      console.log('somg', song);
+      MiniApp.collectSong({
+        album_audio_ids: song.album_audio_ids,
+        success: (res) => {
+          console.log('收藏到我喜欢;', res);
+        },
+        fail: () => {
+          console.log('失败');
+        },
+        complete: () => {
+          console.log('完成');
+        }
       })
     },
-    // 播放上一首
-    onPlayPrev () {
-      console.log('播放上一首');
+    //获取用户信息
+    getUserInfo () {
+      MiniApp.getUserInfo({
+        success: (res) => {
+          //发送到后台
+          utils.sendMsgToPC({ "msg": JSON.stringify(res) }, { "type": 'get' });
+          console.log('用户信息:', res);
+          //存入cookie
+          Cookies.set('userInfo', JSON.stringify(res))
+          this.userInfo = JSON.parse(Cookies.get('userInfo'))
+        },
+        fail (res) {
+          console.log(res);
+        },
+        complete (res) {
+          console.log('完成');
+        }
+      });
     },
-    // 播放下一首
-    onPlayNext () {
-      console.log('播放下一首');
-    }
-    ,
-    login () {
-      /*  MiniApp.searchSource({
-          type: 1,
-          keyword: "你好",
-          page: 1,
-          pageSize: 2,
-          success: function (res) {
-            console.log(res);
-          }
-        })
-        MiniApp.listenOpenLogin({
-          success (res) {
-            console.log(res);
-          },
-          fail (res) {
-            console.log(res);
-          },
-          complete (res) {
-            console.log(res);
-          }
-        })*/
+    //获取专辑信息，我喜欢
+    searchAudio () {
     },
+    //测试五种搜索歌曲方式
+    testEntity () {
+      this.list.push(player.searchSong('我喜欢', 1).res)
+      this.list.push(player.searchSong('我喜欢', 2).res)
+      this.list.push(player.searchSong('我喜欢', 3).res)
+      this.list.push(player.searchSong('我喜欢', 4).res)
+      this.list.push(player.searchSong('我喜欢', 5).res)
+    },
+    //小程序在后台
+    exit () {
+      system.exit()
+    },
+    //获取用户当前位置
+    getLocation () {
+      system.getLocation()
+    },
+    //获取用户存储空间信息
+    getDiskSpaceInfo () {
+      console.error('system.getDiskSpaceInfo():', system.getDiskSpaceInfo());
+    },
+
   }
 }
 </script>
@@ -123,9 +167,8 @@ export default {
   position: relative;
 }
 .my-swipe .van-swipe-item {
-  color: #fff;
-  font-size: 20px;
-  line-height: 150px;
+  font-size: 50px;
+  line-height: 250px;
   text-align: center;
   background-color: #39a9ed;
   top: 1%;

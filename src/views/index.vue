@@ -1,18 +1,21 @@
 <template>
   <div>
-    <YuhouNav></YuhouNav>
     <YuhouFooter></YuhouFooter>
+    <YuhouBack></YuhouBack>
   </div>
 </template>
 
 <script>
-import YuhouNav from '@/components/yuhouNav.vue'
+import YuhouBack from '@/components/yuhouBack.vue'
 import YuhouFooter from '@/components/yuhouFooter.vue'
 export default {
   name: 'index',
   components: {
-    YuhouNav,
     YuhouFooter,
+    YuhouBack,
+  },
+  mounted () {
+    document.title = '鱼猴大本营'
   },
 
 }
