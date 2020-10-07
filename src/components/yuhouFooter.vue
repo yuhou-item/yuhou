@@ -14,6 +14,11 @@
         music
       </van-tabbar-item>
       <van-tabbar-item replace
+                       to="/game"
+                       icon="certificate">
+        game
+      </van-tabbar-item>
+      <van-tabbar-item replace
                        to="/test"
                        icon="video-o">
         test

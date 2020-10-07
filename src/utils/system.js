@@ -1,5 +1,4 @@
 const MiniApp = window.MiniApp
-import utils from '@/utils/utils.js'
 
 /**
  * 登录
@@ -9,10 +8,10 @@ function login() {
     success(res) {
       console.log('登录成功', res)
     },
-    fail() {
+    fail: () => {
       console.error('登录失败')
     },
-    complete() {
+    complete: () => {
       console.log('完成登录')
     }
   })
@@ -24,14 +23,12 @@ function login() {
 function getUserInfo() {
   MiniApp.getUserInfo({
     success: (res) => {
-      //存入cookie
-      Cookies.set('userInfo', JSON.stringify(res))
-      this.userInfo = JSON.parse(Cookies.get('userInfo'))
+      console.log(res);
     },
-    fail(res) {
-      console.log(res)
+    fail: () => {
+      console.log('失败')
     },
-    complete(res) {
+    complete: () => {
       console.log('完成')
     }
   })
@@ -59,7 +56,7 @@ function exit() {
  */
 function getLocation() {
   MiniApp.getLocation({
-    success(res) {
+    success: (res) => {
       console.log('位置:', res)
     },
     fail: () => {

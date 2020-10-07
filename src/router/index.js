@@ -22,6 +22,14 @@ const routes = [{
     },
   },
   {
+    path: '/game',
+    name: 'game',
+    component: () => import('@/views/game.vue'),
+    meta: {
+      title: '听歌猜曲游戏'
+    },
+  },
+  {
     path: '/home',
     name: 'home',
     component: () => import('@/views/home.vue'),
@@ -73,13 +81,18 @@ const routes = [{
     },
   },
 
-  //鱼猴 检测返回组件
+  //鱼猴 检测返回组件 yuhouQuestion
   {
     path: '/yuhouBack',
     name: 'yuhouBack',
     component: () => import('@/components/yuhouBack.vue'),
+  },
+  //鱼猴 题目组件 yuhouQuestion
+  {
+    path: '/yuhouQuestion',
+    name: 'yuhouQuestion',
+    component: () => import('@/components/yuhouQuestion.vue'),
   }
-
 ]
 
 const router = new VueRouter({
