@@ -61,7 +61,7 @@ export default {
         'https://media.w3.org/2010/05/sintel/trailer.mp4',
         'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
       ],*/
-      navTitle: '听歌猜曲',//传递给子组件的标题
+      navTitle: '酷狗音乐小程序api测试',//传递给子组件的标题
       MusicPlayer: null,//播放器单例
 
       userInfo: {}//用户信息

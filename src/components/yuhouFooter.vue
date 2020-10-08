@@ -4,29 +4,31 @@
     <router-view />
     <van-tabbar route>
       <van-tabbar-item replace
-                       to="/home"
-                       icon="home-o">
-        home
-      </van-tabbar-item>
-      <van-tabbar-item replace
                        to="/music"
-                       icon="music-o">
+                       icon="clear">
         music
       </van-tabbar-item>
-      <van-tabbar-item replace
-                       to="/game"
-                       icon="certificate">
-        game
-      </van-tabbar-item>
+
       <van-tabbar-item replace
                        to="/test"
-                       icon="video-o">
+                       icon="clear">
         test
       </van-tabbar-item>
       <van-tabbar-item replace
-                       to="/setting"
-                       icon="setting-o">
-        setting
+                       to="/home"
+                       icon="music-o">
+        home
+      </van-tabbar-item>
+      <van-tabbar-item replace
+                       to="/game"
+                       icon="service-o">
+        game
+      </van-tabbar-item>
+
+      <van-tabbar-item replace
+                       to="/user"
+                       icon="user-o">
+        user
       </van-tabbar-item>
     </van-tabbar>
   </b-container>

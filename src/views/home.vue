@@ -1,12 +1,12 @@
 <template>
   <div>
     <b-container>
+      <!-- 搜歌组件,传递搜索方法给子组件调用 -->
       <van-row>
-        <!-- 搜歌组件,传递搜索方法给子组件调用 -->
-        <YuhouSearchSong @father-search-song="searchSong">
+        <YuhouSearchSong @father-search-song="searchSong"
+                         :navTitle="navTitle">
         </YuhouSearchSong>
       </van-row>
-
       <!--歌曲专辑、轮播图-->
       <van-row>
         <b-container class="main">
@@ -116,6 +116,9 @@ export default {
   },
   data () {
     return {
+      /**传递给组件 YuhouNav 的标题 */
+      navTitle: '听歌',
+
       /**bootstrap VUE 相关 */
       slide: 0,
       sliding: null,

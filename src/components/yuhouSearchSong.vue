@@ -2,12 +2,16 @@
 <!-- 共用组件,-->
 <template>
   <div :class="{'big-screen-margin-top':big_screen_margin_top}">
-    <van-nav-bar title="鱼猴听歌"
-                 left-text="返回"
+    <van-nav-bar left-text="返回"
                  @click-left="back"
                  @click-right="search"
                  left-arrow>
-
+      <!-- 插槽自定义使用了标题-->
+      <template #title>
+        <span class="text-success">
+          {{navTitle}}
+        </span>
+      </template>
       <template #right>
         <van-icon name="search"
                   size="18" />
@@ -34,6 +38,14 @@ export default {
       value: '',//搜索关键字
       //自定义样式相关
       big_screen_margin_top: utils.judgeBigScreen(),
+    }
+  },
+  //接受来自父组件的 自定义标题内容
+  props: {
+    // 第二步，使用props接收.
+    navTitle: {
+      type: String,
+      default: '鱼猴' //没有传值使用默认值
     }
   },
   methods: {

@@ -98,3 +98,12 @@ export class UserInfo {
 
   }
 }
+
+
+/**题目选项 */
+export class Question {
+  constructor(text, value) {
+    this.text = text
+    this.value = value
+  }
+}

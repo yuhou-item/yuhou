@@ -46,9 +46,9 @@ const routes = [{
     },
   },
   {
-    path: '/setting',
-    name: 'setting',
-    component: () => import('@/views/test.vue'),
+    path: '/user',
+    name: 'user',
+    component: () => import('@/views/user.vue'),
     meta: {
       title: '设置'
     },
@@ -89,10 +89,22 @@ const routes = [{
   },
   //鱼猴 题目组件 yuhouQuestion
   {
-    path: '/yuhouQuestion',
-    name: 'yuhouQuestion',
-    component: () => import('@/components/yuhouQuestion.vue'),
-  }
+    path: '/yuhouGameQuestion',
+    name: 'yuhouGameQuestion',
+    component: () => import('@/components/yuhouGameQuestion.vue'),
+  },
+  //鱼猴 答题介绍组件 yuhouGameIntroduction
+  {
+    path: '/yuhouGameIntroduction',
+    name: 'yuhouGameIntroduction',
+    component: () => import('@/components/yuhouGameIntroduction.vue'),
+  },
+  //鱼猴 选择答题的类型组件 yuhouGameSelectItem
+  {
+    path: '/yuhouGameSelectItem',
+    name: 'yuhouGameSelectItem',
+    component: () => import('@/components/yuhouGameSelectItem.vue'),
+  },
 ]
 
 const router = new VueRouter({

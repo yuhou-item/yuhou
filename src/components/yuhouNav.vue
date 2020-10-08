@@ -6,7 +6,9 @@
                  left-arrow>
       <!-- 插槽自定义使用了标题-->
       <template #title>
-        {{navTitle}}
+        <span class="text-success">
+          {{navTitle}}
+        </span>
       </template>
     </van-nav-bar>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <YuhouNav></YuhouNav>
+    <YuhouNav :navTitle="navTitle"></YuhouNav>
     <YuhouFooter></YuhouFooter>
     <YuhouBack></YuhouBack>
   </div>
@@ -16,7 +16,8 @@ export default {
   name: 'test',
   data () {
     return {
-    };
+      navTitle: '鱼猴测试'
+    }
   },
   components: {
     YuhouFooter,
